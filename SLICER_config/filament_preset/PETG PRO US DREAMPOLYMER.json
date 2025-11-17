@@ -1,0 +1,49 @@
+{
+    "compatible_printers": [
+        "Anycubic Kobra 2 Neo 0.4 nozzle"
+    ],
+    "default_filament_colour": [
+        "#000000"
+    ],
+    "enable_pressure_advance": [
+        "1"
+    ],
+    "filament_cost": [
+        "100"
+    ],
+    "filament_density": [
+        "1.23"
+    ],
+    "filament_retract_when_changing_layer": [
+        "0"
+    ],
+    "filament_settings_id": [
+        "PETG PRO US DREAMPOLYMER"
+    ],
+    "filament_type": [
+        "PETG_PRO"
+    ],
+    "filament_vendor": [
+        "DREAM POLYMER"
+    ],
+    "filament_wipe": [
+        "0"
+    ],
+    "from": "User",
+    "inherits": "Generic PETG @System",
+    "is_custom_defined": "0",
+    "name": "PETG PRO US DREAMPOLYMER",
+    "nozzle_temperature": [
+        "225"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "220"
+    ],
+    "nozzle_temperature_range_high": [
+        "230"
+    ],
+    "pressure_advance": [
+        "0.096"
+    ],
+    "version": "2.3.1.10"
+}

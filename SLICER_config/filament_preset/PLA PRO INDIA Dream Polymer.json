@@ -1,0 +1,37 @@
+{
+    "compatible_printers": [
+        "Anycubic Kobra 2 Neo 0.4 nozzle"
+    ],
+    "default_filament_colour": [
+        "#FF5300"
+    ],
+    "filament_cost": [
+        "7000"
+    ],
+    "filament_density": [
+        "1.25"
+    ],
+    "filament_retract_when_changing_layer": [
+        "0"
+    ],
+    "filament_settings_id": [
+        "PLA PRO INDIA Dream Polymer"
+    ],
+    "filament_type": [
+        "PLA_PRO"
+    ],
+    "filament_vendor": [
+        "DreamPolymer"
+    ],
+    "filament_wipe": [
+        "0"
+    ],
+    "from": "User",
+    "inherits": "Generic PLA @System",
+    "is_custom_defined": "0",
+    "name": "PLA PRO INDIA Dream Polymer",
+    "nozzle_temperature_range_high": [
+        "220"
+    ],
+    "version": "2.3.1.10"
+}
