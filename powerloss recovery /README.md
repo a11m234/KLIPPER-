@@ -1,7 +1,7 @@
 # ⚡ Klipper Power Loss Recovery (PLR) Configuration
 
 This configuration modifies and implements a robust Power Loss Recovery system for Klipper, based on the approach by Travis90x. It uses a Python script (`plr.py`) and Klipper macros to save the print state (Z-height, temperatures, filename) during printing, allowing for a seamless resume after a power interruption.
-
+**https://github.com/Travis90x/Klipper-configuration/tree/main/config/scripts/power-loss-recovery**
 -----
 
 ## 🚀 Setup and Installation
