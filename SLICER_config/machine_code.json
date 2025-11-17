@@ -1,0 +1,45 @@
+start G-code :
+  
+G21 ; metric values
+G90 ; use absolute coordinates
+M83 ; extruder relative mode
+M104 S[first_layer_temperature] ; set extruder temp
+M140 S[first_layer_bed_temperature] ; set bed temp
+G28; move X/Y/Z to min endstops
+G1 Z5 F5000 ; lift nozzle
+G1 X-8 Y110 Z50  F4000
+G92 E0 ; zero after lift
+BED_MESH_PROFILE LOAD="default"
+M190 S[first_layer_bed_temperature] ; wait for bed temp
+M109 S[first_layer_temperature] ; wait for extruder temp
+G1 X10 Y5 Z0.3 F1800 ; move to purge line start position
+G1 X150 Y5 E80 F500 ; Extrude 20mm of filament in a 5cm line. 
+G92 E0 ; zero the extruded length again 
+G1 E-4.5 F4000 ; Retract a little 
+G1 X120 Y15 Z0.1 F4000 ; Quickly wipe away from the filament line
+G92 E0 ; zero the extruded length again
+SAVE_LAST_FILE
+M117 Printing... ; Display status message
+
+End G-code :
+
+M140 S0; Heatbed off
+M107; Fan off 
+CLEAR_LAST_FILE
+G91; relative positioning 
+M83 ; extruder relative mode
+G1 E-3 F3000 ;retract the filament a bit before lifting the nozzle, to release some of the pressure
+G1 Z+0.5 F3000 ;move Z up a bit and retract filament even more
+M104 S0; Extruder off
+G28 X Y;move X/Y to min endstops, so the head is out of the way
+G90; absolute positioning 
+G1 Y220 F3000
+M84 ;steppers off
+M300 S1318 P266
+
+Layer Change G-code:
+; AFTER_LAYER_CHANGE
+;Z:[layer_z]
+LOG_Z
+TIMELAPSE_TAKE_FRAME
+
