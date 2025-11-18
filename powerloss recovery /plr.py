@@ -1,5 +1,3 @@
-# This file should be kept in /home/{pc name}/klipper/ with the name plr.py
-# after that run sudo chmod +x ./plr.py
 
 import argparse
 import os
@@ -12,6 +10,7 @@ import time
 SD_PATH = os.path.expanduser("~/printer_data/gcodes")
 PLR_GCODE_FILENAME = "plr.gcode"
 TEMP_FILE = "/tmp/plrtmpA.txt" # Using a safer, static name for the temp file
+lift_z=15
 
 def find_first_motion_after_z_log(gcode_lines, z_height):
     """
@@ -162,16 +161,21 @@ def generate_resume_file(z_height, gcode_file, print_temp, bed_temp):
         # This is the line that tells Klipper the exact physical Z height
         if kinematic_pos_z:
             out_f.write(f"SET_KINEMATIC_POSITION Z={kinematic_pos_z}\n")
+            if float(kinematic_pos_z) > 240.0:
+                lift_z=5
+            else:
+                lift_z=15
+        mov_temp=print_temp*0.75
+        out_f.write(f"M109 S{mov_temp} ; wait for Extruder Temp to reach a safe value before lifting the nozzle to avoid movment to the model  \n")
 
         # --- Universal Homing/Setup Commands (Lines 21-25) ---
         out_f.write("; --- Universal Homing and Setup ---\n")
-        out_f.write('BED_MESH_PROFILE LOAD="default"\n ')
         out_f.write("G91 ; Set relative positioning\n")
-        out_f.write("G1 Z15 ; Move Z up 5mm\n")
+        out_f.write(f"G1 Z{lift_z} ; Move Z up 5mm\n")
         out_f.write("G90 ; Set absolute positioning\n")
         out_f.write("G28 X Y ; Home X and Y axes\n")
         out_f.write("M83 ; Set extruder to relative mode\n")
-
+        out_f.write('BED_MESH_PROFILE LOAD="default"\n ')
         # --- Extruder Temperature Restoration (Lines 29-30) ---
         out_f.write("; --- wait for bed & Extruder Temperature ---\n")
         if meta_bed_temp is not None:
@@ -192,11 +196,11 @@ def generate_resume_file(z_height, gcode_file, print_temp, bed_temp):
                 break # BASH logic uses 'head -1' which is the first match
         if fan_command:
             out_f.write(f"{fan_command} ; Restore Fan Speed\n")
-
+        out_f.write("G1 X110 Y110; moving to the center for saftey ")
         # --- Z-Axis Restore (Lines 62-64) ---
         out_f.write("; --- Z-Axis Restore ---\n")
         out_f.write("G91 ; Relative positioning\n")
-        out_f.write("G1 Z-15 ; Move Z back down 5mm\n")
+        out_f.write(f"G1 Z{-lift_z} ; Move Z back down 5mm\n")
         out_f.write("G90 ; Absolute positioning\n")
 
         # --- Copy Remaining G-code (Line 67) ---
