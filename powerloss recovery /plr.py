@@ -154,9 +154,6 @@ def generate_resume_file(z_height, gcode_file, print_temp, bed_temp):
         else:
             # Fallback to the saved variable ($4) if metadata parsing failed
             out_f.write(f"M140 S{bed_temp} ; Set Bed Temp (from saved variable)\n")
-
-        out_f.write(f"M104 S{print_temp} ; Set for Extruder Temp\n")
-
         # --- SET_KINEMATIC_POSITION Z command ---
         # This is the line that tells Klipper the exact physical Z height
         if kinematic_pos_z:
@@ -166,7 +163,9 @@ def generate_resume_file(z_height, gcode_file, print_temp, bed_temp):
             else:
                 lift_z=15
         mov_temp=print_temp*0.75
+        out_f.write(f"M104 S{mov_temp} ; Set for Extruder Temp\n")
         out_f.write(f"M109 S{mov_temp} ; wait for Extruder Temp to reach a safe value before lifting the nozzle to avoid movment to the model  \n")
+        out_f.write(f"M104 S{print_temp} ; Set for Extruder Temp\n")
 
         # --- Universal Homing/Setup Commands (Lines 21-25) ---
         out_f.write("; --- Universal Homing and Setup ---\n")
@@ -178,12 +177,12 @@ def generate_resume_file(z_height, gcode_file, print_temp, bed_temp):
         out_f.write('BED_MESH_PROFILE LOAD="default"\n ')
         # --- Extruder Temperature Restoration (Lines 29-30) ---
         out_f.write("; --- wait for bed & Extruder Temperature ---\n")
+        out_f.write(f"M109 S{print_temp} ; wait for Extruder Temp\n")
         if meta_bed_temp is not None:
          out_f.write(f"M190 S{meta_bed_temp} ; wait bed Temp\n")
         else:
          out_f.write(f"M190 S{bed_temp} ; wait bed Temp\n")
-        out_f.write(f"M109 S{print_temp} ; wait for Extruder Temp\n")
-
+        
 
 
         # --- Fan Speed (M106) Restoration (Line 38) ---
